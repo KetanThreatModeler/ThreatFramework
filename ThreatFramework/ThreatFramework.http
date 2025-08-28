@@ -1,0 +1,6 @@
+@ThreatFramework_HostAddress = http://localhost:5161
+
+GET {{ThreatFramework_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
