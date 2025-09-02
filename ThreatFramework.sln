@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36408.4
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreatFramework.Api", "ThreatFramework\ThreatFramework.Api.csproj", "{B337F863-0D93-4CD3-BB3F-BC02FC79440C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreatFramework.Core", "ThreatFramework.Core\ThreatFramework.Core.csproj", "{5818F79E-3529-4106-9649-7A09884A1842}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreatFramework.Infrastructure", "ThreatFramework.Infrastructure\ThreatFramework.Infrastructure.csproj", "{963CB4CA-8C2E-482D-ADF4-11441378BC47}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreatFramework.IndexBuilder", "ThreatFramework.IndexBuilder\ThreatFramework.IndexBuilder.csproj", "{68FEBB16-F519-418E-A914-DCB4422C2C29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreatFramework.Utils.YamlFileWriter", "ThreatFramework.Utils.YamlFileWriter\ThreatFramework.Utils.YamlFileWriter.csproj", "{FE246560-C661-4A52-B54F-57E510AE43E2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B337F863-0D93-4CD3-BB3F-BC02FC79440C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B337F863-0D93-4CD3-BB3F-BC02FC79440C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B337F863-0D93-4CD3-BB3F-BC02FC79440C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B337F863-0D93-4CD3-BB3F-BC02FC79440C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5818F79E-3529-4106-9649-7A09884A1842}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5818F79E-3529-4106-9649-7A09884A1842}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5818F79E-3529-4106-9649-7A09884A1842}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5818F79E-3529-4106-9649-7A09884A1842}.Release|Any CPU.Build.0 = Release|Any CPU
+		{963CB4CA-8C2E-482D-ADF4-11441378BC47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{963CB4CA-8C2E-482D-ADF4-11441378BC47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{963CB4CA-8C2E-482D-ADF4-11441378BC47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{963CB4CA-8C2E-482D-ADF4-11441378BC47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68FEBB16-F519-418E-A914-DCB4422C2C29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68FEBB16-F519-418E-A914-DCB4422C2C29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68FEBB16-F519-418E-A914-DCB4422C2C29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68FEBB16-F519-418E-A914-DCB4422C2C29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE246560-C661-4A52-B54F-57E510AE43E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE246560-C661-4A52-B54F-57E510AE43E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE246560-C661-4A52-B54F-57E510AE43E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE246560-C661-4A52-B54F-57E510AE43E2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {692CEFCE-9B29-434F-B76F-4FBA81D1279D}
+	EndGlobalSection
+EndGlobal
