@@ -1,8 +1,24 @@
-namespace ThreatFramework.IndexBuilder;
-
-public sealed record IndexItem(string Kind, Guid Guid, long Id, string Name);
-
-public sealed class IndexDocument
+namespace ThreatFramework.IndexBuilder
 {
-    public List<IndexItem> Items { get; set; } = new();
+    // Prefer a mutable POCO for defensive deserialization.
+    public sealed class IndexItem
+    {
+        public IndexItem(string kind, Guid guid, long id, string name)
+        {
+            Kind = kind;
+            Guid = guid;
+            Id = id;
+            Name = name;
+        }
+
+        public string Kind { get; set; } = "";
+        public Guid Guid { get; set; }
+        public long Id { get; set; }
+        public string? Name { get; set; }
+    }
+
+    public sealed class IndexDocument
+    {
+        public List<IndexItem> Items { get; set; } = new();
+    }
 }

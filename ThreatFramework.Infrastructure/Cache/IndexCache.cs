@@ -1,6 +1,9 @@
-using System.Collections.Concurrent;
 using Microsoft.Extensions.Logging;
-using ThreatFramework.IndexBuilder; // requires project reference
+using System;
+using System.Collections.Concurrent;
+using System.Text;
+using ThreatFramework.IndexBuilder;
+using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -16,7 +19,9 @@ public sealed class IndexCache : IIndexCache
     private readonly ConcurrentDictionary<(string kind, Guid guid), long> _map = new();
     private long _version;
     private volatile bool _initialized;
-    private readonly SemaphoreSlim _refreshLock = new(1,1);
+    private readonly SemaphoreSlim _refreshLock = new(1, 1);
+
+    // One consistent, resilient deserializer.
     private static readonly IDeserializer Deserializer = new DeserializerBuilder()
         .WithNamingConvention(CamelCaseNamingConvention.Instance)
         .IgnoreUnmatchedProperties()
@@ -50,6 +55,7 @@ public sealed class IndexCache : IIndexCache
         {
             _logger.LogInformation("Refreshing index cache from database...");
             var doc = await _builder.BuildAsync(ct).ConfigureAwait(false);
+            Validate(doc);
             Populate(doc);
         }
         finally
@@ -61,19 +67,44 @@ public sealed class IndexCache : IIndexCache
     public async Task RefreshFromFileAsync(string filePath, CancellationToken ct = default)
     {
         if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentException("File path required", nameof(filePath));
+
         await _refreshLock.WaitAsync(ct).ConfigureAwait(false);
         try
         {
             if (!File.Exists(filePath)) throw new FileNotFoundException("Index file not found", filePath);
             _logger.LogInformation("Refreshing index cache from file {File}", filePath);
-            var yaml = await File.ReadAllTextAsync(filePath, ct).ConfigureAwait(false);
-            var doc = Deserializer.Deserialize<IndexDocument>(yaml) ?? throw new InvalidOperationException("Failed to deserialize index document");
-            Populate(doc);
+
+            // Read exact bytes; do not touch newlines or replace tabs.
+            var raw = await File.ReadAllTextAsync(filePath, Encoding.UTF8, ct).ConfigureAwait(false);
+            var yaml = raw.TrimStart('\uFEFF'); // strip BOM only
+
+            IndexDocument doc;
+
+            try
+            {
+                // Preferred: full document { items: [...] }
+                doc = Deserializer.Deserialize<IndexDocument>(yaml)
+                      ?? throw new InvalidOperationException("Deserialized IndexDocument was null.");
+            }
+            catch (YamlException primaryEx)
+            {
+                _logger.LogWarning(primaryEx, "Primary parse failed: {Detail}",
+                    primaryEx.InnerException?.Message ?? primaryEx.Message);
+            }
         }
         finally
         {
             _refreshLock.Release();
         }
+    }
+
+    private static void Validate(IndexDocument doc)
+    {
+        if (doc.Items is null)
+            throw new InvalidOperationException("Index document missing 'items' collection.");
+
+        if (doc.Items.Any(i => string.IsNullOrWhiteSpace(i.Kind)))
+            throw new InvalidOperationException("One or more items have empty 'kind'.");
     }
 
     private void Populate(IndexDocument doc)
@@ -84,8 +115,10 @@ public sealed class IndexCache : IIndexCache
             if (item.Guid == Guid.Empty) continue;
             temp[Normalize(item.Kind, item.Guid)] = item.Id;
         }
+
         _map.Clear();
         foreach (var kv in temp) _map[kv.Key] = kv.Value;
+
         Interlocked.Increment(ref _version);
         _initialized = true;
         _logger.LogInformation("Index cache populated: {Count} entries version {Version}", _map.Count, Version);
@@ -97,5 +130,6 @@ public sealed class IndexCache : IIndexCache
         RefreshAsync().GetAwaiter().GetResult();
     }
 
-    private static (string, Guid) Normalize(string kind, Guid guid) => (kind.Trim().ToLowerInvariant(), guid);
+    private static (string, Guid) Normalize(string kind, Guid guid)
+        => (kind.Trim().ToLowerInvariant(), guid);
 }
