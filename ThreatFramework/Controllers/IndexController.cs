@@ -35,7 +35,7 @@ public class IndexController : ControllerBase
     {
         var doc = await _builder.BuildAsync(ct);
         fileName = string.IsNullOrWhiteSpace(fileName) ? "index.yaml" : fileName.Trim();
-        var outputPath = Path.Combine(AppContext.BaseDirectory, fileName);
+        var outputPath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
         await _writer.WriteAsync(doc, outputPath, ct);
         return Ok(new { file = outputPath, count = doc.Items.Count });
     }

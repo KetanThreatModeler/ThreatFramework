@@ -3,7 +3,7 @@ using ThreatFramework.Core.Abstractions;
 using ThreatFramework.IndexBuilder;
 using ThreatFramework.Infrastructure.Data;
 using ThreatFramework.Infrastructure.Options;
-
+using ThreatFramework.Infrastructure.Cache;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +13,7 @@ builder.Services.Configure<DatabaseOptions>(builder.Configuration.GetSection("Co
 builder.Services.AddSingleton<IDatabaseReader, SqlDatabaseReader>();
 builder.Services.AddSingleton<IIndexBuilder, IndexBuilder>();
 builder.Services.AddSingleton<IIndexWriter, YamlIndexWriter>();
+builder.Services.AddSingleton<IIndexCache, IndexCache>();
 
 // Add services to the container.
 
