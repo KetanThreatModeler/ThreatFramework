@@ -30,4 +30,12 @@ public sealed class IndexCacheController : ControllerBase
         await _cache.RefreshAsync(ct);
         return Ok(new { status = "refreshed", version = _cache.Version });
     }
+
+    /// <summary>Forces a refresh of the underlying index cache from a supplied index file path.</summary>
+    [HttpPost("refresh-from-file")] 
+    public async Task<ActionResult<object>> RefreshFromFile([FromQuery] string path, CancellationToken ct)
+    {
+        await _cache.RefreshFromFileAsync(path, ct);
+        return Ok(new { status = "refreshed", source = path, version = _cache.Version });
+    }
 }

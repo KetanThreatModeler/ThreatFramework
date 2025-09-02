@@ -8,6 +8,9 @@ public interface IIndexCache
     /// <summary>Refreshes the cache by rebuilding the index from the data source.</summary>
     Task RefreshAsync(CancellationToken ct = default);
 
+    /// <summary>Refreshes the cache from a supplied index.yaml file path.</summary>
+    Task RefreshFromFileAsync(string filePath, CancellationToken ct = default);
+
     /// <summary>Attempts to resolve the numeric Id (per-kind sequence) for the supplied kind + guid.</summary>
     bool TryGetId(string kind, Guid guid, out long id);
 
